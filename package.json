@@ -1,0 +1,9 @@
+{
+  "name": "auto-scaling-host-ip-app",
+  "version": "1.0.0",
+  "author": "saddamkhalil",
+  "dependencies": {
+    "express": "4.17.1",
+    "ip": "^1.1.8"
+  }
+}
