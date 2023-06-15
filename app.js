@@ -18,7 +18,7 @@ app.get('/',(req, res) => {
     </form>
     <div style="color: #7F8C8D; margin-bottom: 20px;">
       Host IP: ${ip.address()}<br>
-      Current custom cookie value: ${res.cookies.custom_cookie || 'undefined'}
+      Current custom cookie value: ${req.cookies.custom_cookie || 'undefined'}
     </div>
     <a href="/clear_custom_cookie" style="color: #E74C3C; text-decoration: none;">Clear Cookie</a>
   </div>`;
