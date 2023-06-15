@@ -4,7 +4,7 @@ var ip = require("ip");
 
 const app = express();
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: true })); // this line allows the server to parse form data
+app.use(express.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 3000;
 
