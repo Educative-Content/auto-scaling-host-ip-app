@@ -8,9 +8,8 @@ const app = express();
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-// Use the session middleware
 app.use(session({
-  secret: 'your_secret_key',
+  secret: '1234453233',
   resave: false,
   saveUninitialized: true
 }));
@@ -18,55 +17,42 @@ app.use(session({
 app.get('/', (req, res) => {
   let form = `
   <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #F3F3F3; font-family: Arial, sans-serif;">
-    <form action="/set_custom_cookie" method="POST" style="margin-bottom: 20px;">
-      <label for="customCookie" style="color: #3498DB; font-size: 1.2em;">Enter custom cookie value:</label><br>
+    <form action="/set_values" method="POST" style="margin-bottom: 20px;">
+      <label for="customCookie" style="color: #3498DB; font-size: 1.2em;">Enter cookie value:</label><br>
       <input type="text" id="customCookie" name="customCookie" style="margin-top: 10px; padding: 5px;"><br>
+      <label for="sessionValue" style="color: #3498DB; font-size: 1.2em; margin-top: 10px;">Enter session value:</label><br>
+      <input type="text" id="sessionValue" name="sessionValue" style="margin-top: 10px; padding: 5px;"><br>
       <input type="submit" value="Submit" style="margin-top: 10px; padding: 5px; background-color: #2ECC71; border: none; color: white; cursor: pointer;">
     </form>
     <div style="color: #7F8C8D; margin-bottom: 20px;">
       Host IP: ${ip.address()}<br>
-      Current custom cookie value: ${req.cookies.custom_cookie || 'undefined'}<br>
-      Session value: ${req.session.myValue || 'No session value set'}
+      Cookie value: ${req.cookies.custom_cookie || 'No cookie value set'}<br>
+      Session value: ${req.session.mysession || 'No session value set'}
     </div>
-    <a href="/clear_custom_cookie" style="color: #E74C3C; text-decoration: none;">Clear Cookie</a>
+    <a href="/clear_cookie" style="color: #E74C3C; text-decoration: none;">Clear Cookie</a>
   </div>`;
   
   res.send(form);
 });
 
-app.post('/set_custom_cookie', (req, res) => {
+app.post('/set_values', (req, res) => {
   let cookieValue = req.body.customCookie;
+  let sessionValue = req.body.sessionValue;
+  
   res.cookie(`custom_cookie`, cookieValue);
-  res.send(`
-  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #F3F3F3; font-family: Arial, sans-serif;">
-    <div style="color: #7F8C8D; margin-bottom: 20px;">
-      Host IP: ${ip.address()}<br>
-      Custom cookie has been saved successfully with value: ${cookieValue}
-    </div>
-    <a href="/" style="color: #3498DB; text-decoration: none;">Back</a>
-  </div>`);
+  req.session.mysession = sessionValue;
+
+  res.redirect('/');
 });
 
-app.get('/clear_custom_cookie', (req, res) => {
+app.get('/clear_cookie', (req, res) => {
   res.clearCookie('custom_cookie');
-  res.send(`
-  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #F3F3F3; font-family: Arial, sans-serif;">
-    <div style="color: #7F8C8D; margin-bottom: 20px;">
-      Host IP: ${ip.address()}<br>
-      Custom cookie has been cleared successfully
-    </div>
-    <a href="/" style="color: #3498DB; text-decoration: none;">Back</a>
-  </div>`);
-});
-
-// Sample routes to set and get session values
-app.get('/set_session_value', (req, res) => {
-  req.session.myValue = "Hello, World!";
-  res.send("Session value set!");
-});
-
-app.get('/get_session_value', (req, res) => {
-  res.send(req.session.myValue || "No session value set");
+  req.session.destroy(err => {
+    if (err) {
+      return res.redirect('/');
+    }
+    res.redirect('/');
+  });
 });
 
 const PORT = process.env.PORT || 3000;
