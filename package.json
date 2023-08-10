@@ -5,6 +5,7 @@
   "dependencies": {
     "cookie-parser": "^1.4.6",
     "express": "4.17.1",
-    "ip": "^1.1.8"
+    "ip": "^1.1.8",
+    "express-session": "^1.17.3"
   }
 }
