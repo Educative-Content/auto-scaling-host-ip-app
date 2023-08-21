@@ -17,29 +17,25 @@ app.use(session({
 app.get('/', (req, res) => {
   let form = `
   <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #F3F3F3; font-family: Arial, sans-serif;">
-    <form action="/set_values" method="POST" style="margin-bottom: 20px;">
-      <label for="customCookie" style="color: #3498DB; font-size: 1.2em;">Enter cookie value:</label><br>
-      <input type="text" id="customCookie" name="customCookie" style="margin-top: 10px; padding: 5px;"><br>
-      <label for="sessionValue" style="color: #3498DB; font-size: 1.2em; margin-top: 10px;">Enter session value:</label><br>
-      <input type="text" id="sessionValue" name="sessionValue" style="margin-top: 10px; padding: 5px;"><br>
-      <input type="submit" value="Submit" style="margin-top: 10px; padding: 5px; background-color: #2ECC71; border: none; color: white; cursor: pointer;">
+    <form action="/set_values" method="POST" style="padding: 30px; border: 1px solid #e0e0e0; background-color: #FFFFFF; border-radius: 5px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); width: 350px;">
+      <label for="sessionValue" style="color: #3498DB; font-size: 1.5em;">Enter Session Value:</label><br>
+      <input type="text" id="sessionValue" name="sessionValue" placeholder="Enter session value" style="margin-top: 20px; padding: 10px; width: 100%; font-size: 1.2em; border-radius: 3px;"><br>
+      <input type="submit" value="Submit" style="margin-top: 30px; padding: 10px 20px; background-color: #2ECC71; border: none; color: white; cursor: pointer; font-size: 1.2em; border-radius: 3px;">
     </form>
-    <div style="color: #7F8C8D; margin-bottom: 20px;">
+    <div style="color: #7F8C8D; margin-top: 30px; background-color: #FFFFFF; padding: 20px; border-radius: 5px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); width: 350px; text-align: center;">
       Host IP: ${ip.address()}<br>
-      Cookie value: ${req.cookies.custom_cookie || 'No cookie value set'}<br>
-      Session value: ${req.session.mysession || 'No session value set'}
+      Session Value: ${req.session.mysession || 'No session value set'}
     </div>
-    <a href="/clear_cookie" style="color: #E74C3C; text-decoration: none;">Clear Cookie</a>
+    <a href="/clear_cookie" style="color: #E74C3C; text-decoration: none; margin-top: 20px; font-size: 1.2em;">Clear Session</a>
   </div>`;
   
   res.send(form);
 });
 
 app.post('/set_values', (req, res) => {
-  let cookieValue = req.body.customCookie;
   let sessionValue = req.body.sessionValue;
   
-  res.cookie(`custom_cookie`, cookieValue);
+  res.cookie(`custom_cookie`, 'educative'); // Hardcoded value
   req.session.mysession = sessionValue;
 
   res.redirect('/');
